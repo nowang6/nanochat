@@ -14,26 +14,16 @@ import requests
 import pyarrow.parquet as pq
 from multiprocessing import Pool
 
-from nanochat.common import get_base_dir
-PROXY = "127.0.0.1:7890"  # 代理地址，格式: "IP:PORT" 或 None 表示不使用代理
-
-# 设置代理环境变量
-if PROXY:
-    os.environ["HTTP_PROXY"] = f"http://{PROXY}"
-    os.environ["HTTPS_PROXY"] = f"http://{PROXY}"
-    os.environ["http_proxy"] = f"http://{PROXY}"
-    os.environ["https_proxy"] = f"http://{PROXY}"
-
 # -----------------------------------------------------------------------------
 # The specifics of the current pretraining dataset
 
-# The URL on the internet where the data is hosted and downloaded from on demand
-BASE_URL = "https://huggingface.co/datasets/karpathy/fineweb-edu-100b-shuffle/resolve/main"
+# Load data from local directory instead of downloading from HuggingFace
+DATA_DIR = "/data/datasets/fineweb"
 MAX_SHARD = 1822 # the last datashard is shard_01822.parquet
 index_to_filename = lambda index: f"shard_{index:05d}.parquet" # format of the filenames
-base_dir = get_base_dir()
-DATA_DIR = os.path.join(base_dir, "base_data")
-os.makedirs(DATA_DIR, exist_ok=True)
+
+# The URL on the internet where the data is hosted (kept for download function if needed)
+BASE_URL = "https://huggingface.co/datasets/karpathy/fineweb-edu-100b-shuffle/resolve/main"
 
 # -----------------------------------------------------------------------------
 # These functions are useful utilities to other modules, can/should be imported
