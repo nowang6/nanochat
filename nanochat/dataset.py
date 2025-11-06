@@ -15,6 +15,14 @@ import pyarrow.parquet as pq
 from multiprocessing import Pool
 
 from nanochat.common import get_base_dir
+PROXY = "127.0.0.1:7890"  # 代理地址，格式: "IP:PORT" 或 None 表示不使用代理
+
+# 设置代理环境变量
+if PROXY:
+    os.environ["HTTP_PROXY"] = f"http://{PROXY}"
+    os.environ["HTTPS_PROXY"] = f"http://{PROXY}"
+    os.environ["http_proxy"] = f"http://{PROXY}"
+    os.environ["https_proxy"] = f"http://{PROXY}"
 
 # -----------------------------------------------------------------------------
 # The specifics of the current pretraining dataset
